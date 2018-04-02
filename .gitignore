@@ -1,0 +1,15 @@
+# Build artifacts:
+/_build
+
+# Test coverage data:
+/cover
+
+# Dependencies:
+/deps
+
+# Dumps and logs:
+erl_crash.dump
+*.log
+
+# Mix archives:
+*.ez

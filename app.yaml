@@ -1,0 +1,4 @@
+env: flex
+runtime: gs://elixir-runtime/elixir.yaml
+runtime_config:
+  release_app: learn_elixir_the_hard_way
