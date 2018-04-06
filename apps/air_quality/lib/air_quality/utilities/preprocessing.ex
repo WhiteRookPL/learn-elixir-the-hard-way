@@ -50,41 +50,8 @@ defmodule AirQuality.Utilities.Preprocessing do
          {:ok, stations} <- Jason.decode(content)
     do
       result = for station <- stations do
-        if station_file == "gios" do
-          lat = String.to_float(station["gegrLat"])
-          lng = String.to_float(station["gegrLon"])
-
-          %{
-            :id => station["id"],
-            :lat => lat,
-            :lng => lng,
-            :geohash => AirQuality.Utilities.GeoHash.to_base32_geohash(lat, lng, @geohash_precision),
-            :city => station["city"]["name"],
-            :street => station["addressStreet"],
-            :province => String.downcase(station["city"]["commune"]["provinceName"]),
-            :country => "Poland"
-          }
-        else
-          street = if Map.has_key?(station["address"], "route") do
-            String.trim("#{station["address"]["route"]} #{station["address"]["street_number"]}")
-          else
-            ""
-          end
-
-          lat = station["location"]["latitude"]
-          lng = station["location"]["longitude"]
-
-          %{
-            :id => station["id"],
-            :lat => lat,
-            :lng => lng,
-            :geohash => AirQuality.Utilities.GeoHash.to_base32_geohash(lat, lng, @geohash_precision),
-            :city => station["address"]["locality"],
-            :street => street,
-            :province => "",
-            :country => station["address"]["country"]
-          }
-        end
+        # ???
+        %{}
       end
 
       {:ok, result}
@@ -112,14 +79,8 @@ defmodule AirQuality.Utilities.Preprocessing do
          result <- cities
                    |> Enum.filter(fn(city) -> city["country"] == "PL" end)
                    |> Enum.map(fn(city) ->
-                        lat = String.to_float(city["lat"])
-                        lng = String.to_float(city["lng"])
-                        %{
-                          :lat => lat,
-                          :lng => lng,
-                          :geohash => AirQuality.Utilities.GeoHash.to_base32_geohash(lat, lng, @geohash_precision),
-                          :city => city["name"]
-                        }
+                        # ???
+                        %{}
                       end)
     do
       {:ok, result}
