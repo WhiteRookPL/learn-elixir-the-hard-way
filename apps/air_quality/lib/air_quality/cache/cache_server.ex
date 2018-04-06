@@ -20,8 +20,7 @@ defmodule AirQuality.Cache.CacheServer do
   Returns `{:ok, value}` if the item exists, `:error` otherwise.
   """
   def lookup(server, key) do
-    # ???
-    GenServer.call(server, nil)
+    GenServer.call(server, {:lookup, key})
   end
 
   @doc """
@@ -30,8 +29,7 @@ defmodule AirQuality.Cache.CacheServer do
   Returns `:ok` if item was saved, `:error` otherwise.
   """
   def cache(server, key, value) do
-    # ???
-    GenServer.call(server, nil)
+    GenServer.call(server, {:cache, key, value})
   end
 
   ### Behavior Callbacks
@@ -57,15 +55,13 @@ defmodule AirQuality.Cache.CacheServer do
       value -> {:ok, value}
     end
 
-    # ???
-    {:reply, nil, nil}
+    {:reply, result, table}
   end
 
   def handle_call({:cache, key, value}, _from, table) do
     ttl = Application.get_env(:air_quality, :cache)[:ttl_in_seconds]
     ^value = AirQuality.Cache.set(table, key, value, ttl)
 
-    # ???
-    {:reply, nil, nil}
+    {:reply, :ok, table}
   end
 end
