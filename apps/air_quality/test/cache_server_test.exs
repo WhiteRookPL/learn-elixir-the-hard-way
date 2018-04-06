@@ -1,6 +1,8 @@
 defmodule AirQuality.Cache.CacheServerTest do
   use ExUnit.Case
 
+  @moduletag marked: true
+
   setup context do
     {:ok, pid} = AirQuality.Cache.CacheServer.start_link(name: context.test)
 

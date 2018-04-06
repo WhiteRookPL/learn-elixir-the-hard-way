@@ -31,8 +31,8 @@ defmodule AirQuality.Utilities.GeoHash do
       "ababa"
   """
   def to_geohash(bits, alphabet \\ @base32_alphabet, word_size \\ @base32_word_size) do
-    # ???
-    nil
+    indexes = for <<x::size(word_size) <- bits>>, do: x
+    Enum.join(Enum.map(indexes, &String.at(alphabet, &1)), "")
   end
 
   @min_lat -90
@@ -41,6 +41,53 @@ defmodule AirQuality.Utilities.GeoHash do
   @min_lng -180
   @max_lng +180
 
+  @doc """
+    Encodes provided latitude (as `lat`) and longitude (as `lng`)
+    with desired length (in characters) to a geohash, which uses
+    standard `base32` alphabet.
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(0.0, 0.0, -1)
+      ** (FunctionClauseError) no function clause matching in AirQuality.Utilities.GeoHash.to_base32_geohash/3
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(0.0, 0.0, 0)
+      ** (FunctionClauseError) no function clause matching in AirQuality.Utilities.GeoHash.to_base32_geohash/3
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(-90.1, 0.0, 0)
+      ** (FunctionClauseError) no function clause matching in AirQuality.Utilities.GeoHash.to_base32_geohash/3
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(90.1, 0.0, 0)
+      ** (FunctionClauseError) no function clause matching in AirQuality.Utilities.GeoHash.to_base32_geohash/3
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(0, -180.1, 0)
+      ** (FunctionClauseError) no function clause matching in AirQuality.Utilities.GeoHash.to_base32_geohash/3
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(0, 180.1, 0)
+      ** (FunctionClauseError) no function clause matching in AirQuality.Utilities.GeoHash.to_base32_geohash/3
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(0.0, 0.0)
+      "s000"
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(-1.0, -1.0)
+      "7zz6"
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(1.0, 1.0)
+      "s00t"
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(90.0, 180.0)
+      "zzzz"
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(-90.0, -180.0)
+      "0000"
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(10.0, 10.0)
+      "s1z0"
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(52.2333, 21.0167, 9)
+      "u3qcnhzch"
+
+      iex> AirQuality.Utilities.GeoHash.to_base32_geohash(57.64911, 10.40744, 11)
+      "u4pruydqqvj"
+  """
   def to_base32_geohash(lat, lng, length \\ 4)
     when length > 0 and
          lat >= @min_lat and
@@ -76,11 +123,62 @@ defmodule AirQuality.Utilities.GeoHash do
     end
   end
 
+  @doc """
+    Checks if a provided latitude (as `lat`) and longitude (as `lng`) is inside provided geohash
+    bounding box (as `geohash`).
+
+      iex> AirQuality.Utilities.GeoHash.is_location_inside_geohash?(0.0, 0.0, "")
+      true
+
+      iex> AirQuality.Utilities.GeoHash.is_location_inside_geohash?(0.0, 0.0, "zzz")
+      false
+
+      iex> AirQuality.Utilities.GeoHash.is_location_inside_geohash?(0.0, 0.0, "s")
+      true
+
+      iex> AirQuality.Utilities.GeoHash.is_location_inside_geohash?(0.0, 0.0, "s0")
+      true
+
+      iex> AirQuality.Utilities.GeoHash.is_location_inside_geohash?(0.0, 0.0, "s00")
+      true
+
+      iex> AirQuality.Utilities.GeoHash.is_location_inside_geohash?(57.64911, 10.40744, "u4pru")
+      true
+
+      iex> AirQuality.Utilities.GeoHash.is_location_inside_geohash?(57.64911, 10.40744, "u4pru2")
+      false
+  """
   def is_location_inside_geohash?(lat, lng, origin) do
     location = AirQuality.Utilities.GeoHash.to_base32_geohash(lat, lng, 10)
     is_geohash_inside_another_one?(location, origin)
   end
 
+  @doc """
+    Checks if a provided geohash (as `geohash`) is inside bigger one,
+    represented as `bigger_geohash` (bigger area is a prefix of smaller
+    location).
+
+      iex> AirQuality.Utilities.GeoHash.is_geohash_inside_another_one?("", "")
+      true
+
+      iex> AirQuality.Utilities.GeoHash.is_geohash_inside_another_one?("aaa", "zzz")
+      false
+
+      iex> AirQuality.Utilities.GeoHash.is_geohash_inside_another_one?("s00000", "s")
+      true
+
+      iex> AirQuality.Utilities.GeoHash.is_geohash_inside_another_one?("s00000", "s0")
+      true
+
+      iex> AirQuality.Utilities.GeoHash.is_geohash_inside_another_one?("s00000", "s00")
+      true
+
+      iex> AirQuality.Utilities.GeoHash.is_geohash_inside_another_one?("u4pruj2zu", "u4pru")
+      true
+
+      iex> AirQuality.Utilities.GeoHash.is_geohash_inside_another_one?("u4pruj2zu", "u4pru2")
+      false
+  """
   def is_geohash_inside_another_one?(geohash, bigger_geohash) do
     String.starts_with?(geohash, bigger_geohash)
   end
