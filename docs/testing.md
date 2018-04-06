@@ -19,13 +19,13 @@ $ curl -X GET -v "http://localhost:8080/api/conditions?lat=50.2774207&lng=18.648
 
 ```bash
 # Skyrise HQ:
-$ curl -X GET -v "https://learn-elixir-the-hard-way.appspot.com/api/conditions?lat=50.262858&lng=19.013808" | jq
+$ curl -X GET -v "https://<PROJECT_ID>.appspot.com/api/conditions?lat=50.262858&lng=19.013808" | jq
 
 # Hackerspace Silesia HQ:
-$ curl -X GET -v "https://learn-elixir-the-hard-way.appspot.com/api/conditions?lat=50.2641006&lng=18.9936806" | jq
+$ curl -X GET -v "https://<PROJECT_ID>.appspot.com/api/conditions?lat=50.2641006&lng=18.9936806" | jq
 
 # Gliwice Sikornik:
-$ curl -X GET -v "https://learn-elixir-the-hard-way.appspot.com/api/conditions?lat=50.2774207&lng=18.6481976" | jq
+$ curl -X GET -v "https://<PROJECT_ID>.appspot.com/api/conditions?lat=50.2774207&lng=18.6481976" | jq
 ```
 
 ## Using `:observer` tool and introspecting `localhost` release
@@ -53,7 +53,7 @@ $ GTK_THEME=Adwaita:light iex --name lethw_debug@127.0.0.1 --cookie "PASTE_HERE_
 
 ## Using `wobserver` tool and introspecting remote release
 
-After deploying application inside *app engine* in *GCP* you should be able to do *API* requests at address `https://learn-elixir-the-hard-way.appspot.com`. You will be able to see also a nice dashboard when hitting following link: `https://learn-elixir-the-hard-way.appspot.com/wobserver`.
+After deploying application inside *app engine* in *GCP* you should be able to do *API* requests at address `https://<PROJECT_ID>.appspot.com`. You will be able to see also a nice dashboard when hitting following link: `https://<PROJECT_ID>.appspot.com/wobserver`.
 
 This nice dashboard is also available on `localhost` without any issues.
 

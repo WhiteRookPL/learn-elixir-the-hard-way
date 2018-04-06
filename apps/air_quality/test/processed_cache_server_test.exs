@@ -1,8 +1,6 @@
 defmodule AirQuality.Cache.ProcessedCacheServerTest do
   use ExUnit.Case
 
-  @moduletag marked: true
-
   test "City should be fetched via geohash" do
     city = AirQuality.Cache.PreprocessedCacheServer.city(PreprocessedCacheServer, "u3psyxaw2")
 

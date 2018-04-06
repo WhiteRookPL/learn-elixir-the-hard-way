@@ -84,4 +84,4 @@ $ gcloud app browse
 gcloud projects delete [YOUR_PROJECT_ID]
 ```
 
-For us `[YOUR_PROJECT_ID]` is equal to `learn-elixir-the-hard-way`.
+You can check `[YOUR_PROJECT_ID]` with command `gcloud projects list`.

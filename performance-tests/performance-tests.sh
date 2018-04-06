@@ -4,7 +4,7 @@ MODE=${1:-"localhost"}
 HOSTNAME="http://localhost:8080"
 
 if [[ "${MODE}" == "gcp" ]]; then
-  HOSTNAME="https://learn-elixir-the-hard-way.appspot.com"
+  HOSTNAME="https://lethw-19052018.appspot.com"
 fi
 
 # Warm-up.

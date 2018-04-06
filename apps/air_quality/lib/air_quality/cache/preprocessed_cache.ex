@@ -67,17 +67,21 @@ defmodule AirQuality.Cache.PreprocessedCacheServer do
   - {:gios_station_from, geohash} - for getting GIOŚ station ID based on given `geohash`.
   """
   def handle_call({:city_from, geohash}, _from, %{ cities: cities } = state) do
-    # ???
-    {:reply, nil, state}
+    {:reply, single_by_geohash(cities, geohash), state}
   end
 
   def handle_call({:airly_station_from, geohash}, _from, %{ airly: stations } = state) do
-    # ???
-    {:reply, nil, state}
+    {:reply, single_by_geohash(stations, geohash), state}
   end
 
   def handle_call({:gios_station_from, geohash}, _from, %{ gios: stations } = state) do
-    # ???
-    {:reply, nil, state}
+    {:reply, single_by_geohash(stations, geohash), state}
+  end
+
+  defp single_by_geohash(list, geohash) do
+    case Enum.filter(list, fn(entity) -> is_geohash_inside_another_one?(geohash, entity[:geohash]) end) do
+      []         -> :error
+      results    -> hd(results)
+    end
   end
 end

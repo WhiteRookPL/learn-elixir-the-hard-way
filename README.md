@@ -3,6 +3,7 @@
 ## Editions
 
 - [devwarsztaty.pl (07.04.2018, Katowice)](http://devwarsztaty.pl/warsztaty/2018-04-07)
+- *Home Office* (19.05.2018, Gliwice)
 
 ## Guides
 
